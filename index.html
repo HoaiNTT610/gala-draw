@@ -3,45 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Danh Sách Giải Thưởng</title>
+    <title>Giải Thưởng</title>
     <link rel="stylesheet" href="prizes.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 
     <h1 class="prize-list-header">🎉 DANH SÁCH GIẢI THƯỞNG HẤP DẪN 🎉</h1>
 
-    <div class="prize-container">
-        <div class="prize-card special">
-            <img src="placeholder-special.jpg" alt="Giải Đặc Biệt" class="prize-image">
-            <h2 class="prize-name">Giải Đặc Biệt</h2>
-            <p class="prize-description">Giải thưởng cao quý nhất, tượng trưng cho sự may mắn và thành công tuyệt đối!</p>
-            <div class="prize-info">
-                <span class="info-label">Số Lượng</span>
-                <span class="info-value">01</span>
-            </div>
-        </div>
+    <div class="special-prize-wrapper" id="special-prize-output">
+    </div>
 
-        <div class="prize-card">
-            <img src="placeholder-first.jpg" alt="Giải Nhất" class="prize-image">
-            <h2 class="prize-name">Giải Nhất</h2>
-            <p class="prize-description">Phần thưởng giá trị dành cho những thành tích xuất sắc nhất. Giá trị lớn!</p>
-            <div class="prize-info">
-                <span class="info-label">Số Lượng</span>
-                <span class="info-value">03</span>
-            </div>
-        </div>
+    <div class="prize-container" id="regular-prizes-output">
+    </div>
 
-        <div class="prize-card">
-            <img src="placeholder-encouragement.jpg" alt="Giải Khuyến Khích" class="prize-image">
-            <h2 class="prize-name">Giải Khuyến Khích</h2>
-            <p class="prize-description">Giải thưởng động viên tinh thần, giúp bạn tiếp tục nỗ lực. Đáng giá!</p>
-            <div class="prize-info">
-                <span class="info-label">Số Lượng</span>
-                <span class="info-value">50</span>
-            </div>
-        </div>
-        
-        </div>
+    <div class="fixed-controls-container">
+        <button id="floatingBackButton" class="control-button" title="Quay lại">
+            Quay
+        </button>
 
+        <button id="musicToggleButton" class="control-button" title="Phát nhạc">
+            Phát nhạc
+        </button>
+    </div>
+
+    <audio id="backgroundMusic" loop>
+        <source src="sounds/open_song.mp3" type="audio/mp3"> 
+        Trình duyệt của bạn không hỗ trợ thẻ audio.
+    </audio>
+
+    <script src="prizes.js"></script>
+    
 </body>
 </html>
