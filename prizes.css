@@ -1,0 +1,221 @@
+/* prizes.css - HOÀN CHỈNH */
+
+/* Thiết lập chung */
+body {
+    font-family: 'Poppins', sans-serif;
+    color: #2c3e50; 
+    margin: 0;
+    padding: 30px 20px;
+    text-align: center;
+    
+    /* --- HIỆU ỨNG NỀN MỚI --- */
+    
+    /* 1. Ảnh nền (Thay đường dẫn ảnh của bạn vào) */
+    background-image: 
+        /* Lớp phủ (Overlay): Dùng gradient để làm mờ ảnh và tăng độ tương phản */
+        linear-gradient(rgba(240, 248, 255, 0.85), rgba(230, 233, 240, 0.95)), 
+        /* Đường dẫn ảnh thực tế */
+        url('images/background.jpg'); 
+        
+    /* 2. Cấu hình ảnh nền */
+    background-size: cover; /* Đảm bảo ảnh luôn bao phủ toàn bộ màn hình */
+    background-attachment: fixed; /* Giữ ảnh cố định khi cuộn (Hiệu ứng Parallax nhẹ) */
+    background-position: center center; /* Căn giữa ảnh */
+    background-repeat: no-repeat;
+}
+
+/* Tiêu đề */
+.prize-list-header {
+    color: #c0392b; 
+    margin: 0 0 50px 0;
+    font-size: 3em; 
+    font-weight: 800;
+    border-bottom: 5px solid #e74c3c;
+    display: inline-block;
+    padding-bottom: 15px;
+    letter-spacing: 1px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* --- WRAPPER RIÊNG CHO GIẢI ĐẶC BIỆT --- */
+.special-prize-wrapper {
+    display: flex;
+    justify-content: center; 
+    margin-bottom: 50px; 
+    padding: 0 5%;
+    border-bottom: 1px dashed #ccc; 
+    padding-bottom: 30px;
+}
+
+/* CONTAINER CHO CÁC GIẢI THƯỞNG CÒN LẠI */
+.prize-container {
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: center; 
+    gap: 40px; 
+    padding: 0 5%;
+}
+
+/* Thẻ (card) của từng giải thưởng */
+.prize-card {
+    background-color: #ffffff;
+    border: none; 
+    border-radius: 15px; 
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); 
+    width: 320px; 
+    padding: 25px;
+    transition: transform 0.4s ease-in-out, box-shadow 0.4s ease-in-out;
+    text-align: left;
+    /* RẤT QUAN TRỌNG: Để ảnh và nội dung xếp dọc */
+    display: block; 
+    overflow: hidden; 
+}
+
+.prize-card:hover {
+    transform: translateY(-8px) scale(1.02); 
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* Hình ảnh giải thưởng */
+.prize-image {
+    width: 100%;
+    height: 240px; 
+    object-fit: cover; 
+    border-radius: 10px; 
+    /* RẤT QUAN TRỌNG: Đảm bảo ảnh chiếm hết chiều rộng và đẩy phần tử dưới xuống dòng */
+    display: block; 
+    margin-bottom: 25px; /* Khoảng cách với phần tên/số lượng bên dưới */
+}
+
+/* Tên giải thưởng */
+.prize-name {
+    font-size: 1.3em; 
+    color: #2980b9; 
+    margin: 0;
+    font-weight: 700;
+    flex-shrink: 1; /* Cho phép co lại */
+    margin-right: 15px; 
+    line-height: 1.2;
+}
+
+/* Mô tả giải thưởng (Đã bị loại bỏ khỏi HTML, nhưng giữ định nghĩa CSS để tránh lỗi nếu có) */
+.prize-description {
+    display: none; 
+}
+
+/* Bố cục: Tên giải và Số lượng cùng hàng (Flexbox) */
+.prize-info {
+    margin-top: 0; 
+    padding-top: 20px;
+    border-top: 2px dashed #ecf0f1; 
+    
+    display: flex; 
+    justify-content: space-between; 
+    align-items: flex-start; /* Căn chỉnh từ trên xuống */
+}
+
+/* Giá trị số lượng (Phần tử nằm bên phải) */
+.info-value {
+    font-size: 1.8em; 
+    font-weight: 900;
+    color: #27ae60; 
+    flex-shrink: 0; 
+    white-space: nowrap;
+}
+
+/* --- ĐỊNH DẠNG ĐẶC BIỆT CHO GIẢI ĐẶC BIỆT --- */
+
+/* Điều chỉnh kích thước và style nổi bật hơn cho Giải Đặc Biệt */
+.special-prize-wrapper .prize-card.special {
+    width: 350px; 
+    background: linear-gradient(145deg, #fff0f5, #ffdddd); 
+    border: 4px solid #e74c3c; 
+    box-shadow: 0 15px 45px rgba(231, 76, 60, 0.6); 
+    transform: scale(1.08); 
+}
+
+.prize-card.special:hover {
+    transform: scale(1.10); 
+    box-shadow: 0 20px 50px rgba(231, 76, 60, 0.8);
+}
+
+.prize-card.special .prize-name {
+    color: #e67e22; 
+    font-size: 1.4em; 
+}
+.prize-card.special .info-value {
+    color: #e74c3c; 
+    font-size: 2.2em; 
+}
+
+
+/* --- THIẾT KẾ CÁC NÚT CỐ ĐỊNH --- */
+
+/* Container cho các nút cố định (Phát nhạc và Quay) */
+.fixed-controls-container {
+    position: fixed;
+    top: 50%; /* Vị trí giữa màn hình */
+    right: 30px; 
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column; /* Xếp chồng theo chiều dọc */
+    gap: 15px; /* Khoảng cách giữa các nút */
+    z-index: 1000;
+}
+
+/* Kiểu dáng chung cho cả hai nút */
+.control-button {
+    background-color: #3498db; /* Màu xanh */
+    color: white;
+    font-weight: bold;
+    border: 2px solid #2980b9;
+    border-radius: 50%; /* Hình tròn */
+    
+    width: 70px; /* Kích thước vừa vặn cho chữ "Dừng phát" */
+    height: 70px;
+    font-size: 0.9em;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s, box-shadow 0.3s;
+    line-height: 1.1; /* Giúp chữ "Dừng phát" xuống dòng nếu cần */
+    text-align: center;
+    padding: 5px; /* Thêm padding */
+}
+
+/* Style riêng cho nút Quay (Nếu cần nổi bật hơn) */
+#floatingBackButton {
+    background-color: #f39c12; /* Màu cam nổi bật */
+    border-color: #e67e22;
+}
+
+.control-button:hover {
+    background-color: #2980b9;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+#floatingBackButton:hover {
+    background-color: #e67e22;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .prize-card {
+        width: calc(50% - 30px); 
+    }
+    /* Giải đặc biệt vẫn chiếm toàn bộ, nhưng kích thước nhỏ hơn */
+    .special-prize-wrapper .prize-card.special {
+        width: 300px;
+    }
+}
+
+@media (max-width: 480px) {
+    .prize-card, .special-prize-wrapper .prize-card.special {
+        width: 100%; 
+    }
+    .prize-list-header {
+        font-size: 2.2em;
+    }
+    .floating-back-button {
+        right: 15px; /* Dịch nút vào trong */
+    }
+}

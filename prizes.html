@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giải Thưởng</title>
+    <link rel="stylesheet" href="prizes.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <h1 class="prize-list-header">🎉 DANH SÁCH GIẢI THƯỞNG HẤP DẪN 🎉</h1>
+
+    <div class="special-prize-wrapper" id="special-prize-output">
+    </div>
+
+    <div class="prize-container" id="regular-prizes-output">
+    </div>
+
+    <div class="fixed-controls-container">
+        <button id="floatingBackButton" class="control-button" title="Quay lại">
+            Quay
+        </button>
+
+        <button id="musicToggleButton" class="control-button" title="Phát nhạc">
+            Phát nhạc
+        </button>
+    </div>
+
+    <audio id="backgroundMusic" loop>
+        <source src="sounds/open_song.mp3" type="audio/mp3"> 
+        Trình duyệt của bạn không hỗ trợ thẻ audio.
+    </audio>
+
+    <script src="prizes.js"></script>
+    
+</body>
+</html>
