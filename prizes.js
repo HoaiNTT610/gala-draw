@@ -1,3 +1,8 @@
+// =======================
+// prizes.js
+// =======================
+
+// Danh sách giải thưởng
 const prizes = [
   {name: "Giải đặc biệt", quantity: 1, image: "images/giai_dac_biet.jpg"},
   {name: "Giải nhất", quantity: 2, image: "images/giai_nhat.jpg"},
@@ -5,11 +10,32 @@ const prizes = [
   {name: "Giải ba", quantity: 5, image: "images/giai_ba.jpg"},
 ];
 
-const music = new Audio("sounds/open_program.mp3");
-music.volume = 0.2;
+// Biến lưu danh sách người trúng giải
+let winners = [];
 
+// =======================
+// Kiểm tra danh sách người trúng giải khi mở app
+// =======================
+window.addEventListener("load", () => {
+  const storedWinners = JSON.parse(localStorage.getItem("winners")) || [];
+  if(storedWinners.length > 0){
+    if(confirm("Có muốn reset lại danh sách người đã trúng giải không?")){
+      localStorage.removeItem("winners");
+      winners = [];
+    } else {
+      winners = storedWinners;
+    }
+  }
+  // Sau khi xử lý reset/load, render danh sách giải thưởng
+  renderPrizes();
+});
+
+// =======================
+// Render danh sách giải thưởng
+// =======================
 function renderPrizes() {
   const container = document.getElementById("prizes-list");
+  container.innerHTML = ""; // xóa trước khi render lại
   prizes.forEach(prize => {
     const div = document.createElement("div");
     div.className = "prize";
@@ -21,23 +47,42 @@ function renderPrizes() {
   });
 }
 
-renderPrizes();
-
-document.getElementById("btn-draw").addEventListener("click", () => {
-  document.getElementById("prizes-screen").style.display = "none";
-  document.getElementById("draw-screen").style.display = "block";
-  duringMusic.play();
-});
-
+// =======================
+// Nhạc nền
+// =======================
+const music = new Audio("sounds/open_program.mp3");
+music.volume = 0.2;
 let duringMusic = new Audio("sounds/during_process.mp3");
 duringMusic.loop = true;
 
-document.getElementById("btn-music").addEventListener("click", () => {
-  if(music.paused) {
+// =======================
+// Nút Quay
+// =======================
+document.getElementById("btn-draw").addEventListener("click", () => {
+  // Tắt nhạc nếu đang phát
+  if(!music.paused) music.pause();
+  if(!duringMusic.paused) duringMusic.pause();
+
+  // Chuyển màn hình
+  document.getElementById("prizes-screen").style.display = "none";
+  document.getElementById("draw-screen").style.display = "block";
+
+  // Phát nhạc during_process
+  duringMusic.currentTime = 0;
+  duringMusic.play();
+});
+
+// =======================
+// Nút Phát nhạc / Dừng nhạc
+// =======================
+const btnMusic = document.getElementById("btn-music");
+btnMusic.addEventListener("click", () => {
+  if(music.paused){
+    // Phát nhạc từ điểm dừng trước đó
     music.play();
-    document.getElementById("btn-music").textContent = "Dừng nhạc";
+    btnMusic.textContent = "Dừng nhạc";
   } else {
     music.pause();
-    document.getElementById("btn-music").textContent = "Phát nhạc";
+    btnMusic.textContent = "Phát nhạc";
   }
 });
