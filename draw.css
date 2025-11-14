@@ -1,138 +1,223 @@
-/* draw.css - GIAO DIỆN QUAY SỐ TRÚNG THƯỞNG CHUYÊN NGHIỆP */
+// draw.js - LOGIC QUAY SỐ VÒNG QUAY MAY MẮN VÀ KIỂM SOÁT RESET
 
-/* --- THIẾT LẬP KEYFRAMES (Hoạt hình) --- */
+// Danh sách người tham gia gốc (BẠN PHẢI CẬP NHẬT DANH SÁCH NÀY)
+const participants = [
+    "Nguyễn Văn A", 
+    "Trần Thị B", 
+    "Lê Văn C", 
+    "Phạm Thị D", 
+    "Hoàng Văn E",
+    "Phạm Văn F",
+    "Nguyễn Thị G",
+    "Trần Văn H"
+    // THÊM TẤT CẢ TÊN NGƯỜI THAM GIA VÀO ĐÂY
+];
 
-@keyframes neon-glow {
-    0%, 100% {
-        text-shadow: 0 0 5px #f1c40f, 0 0 10px #f1c40f, 0 0 20px #e67e22;
+// Danh sách người thắng cuộc (sẽ được tải từ localStorage)
+let winners = []; 
+let isSpinning = false;
+let slotRollerElement = null;
+
+// --- A. LOGIC LƯU TRỮ VÀ RESET ---
+
+/**
+ * Tải danh sách người thắng cuộc từ localStorage.
+ */
+function loadWinners() {
+    const savedWinners = localStorage.getItem('galaDrawWinners');
+    if (savedWinners) {
+        try {
+            // Danh sách winners lưu trữ dưới dạng { name: "...", time: "..." }
+            winners = JSON.parse(savedWinners);
+        } catch (e) {
+            console.error("Lỗi khi tải danh sách người thắng cuộc:", e);
+            winners = []; 
+        }
+    } else {
+        winners = [];
     }
-    50% {
-        text-shadow: 0 0 10px #f1c40f, 0 0 30px #e67e22, 0 0 40px #f39c12;
+}
+
+/**
+ * Lưu danh sách người thắng cuộc vào localStorage.
+ */
+function saveWinners() {
+    localStorage.setItem('galaDrawWinners', JSON.stringify(winners));
+}
+
+/**
+ * Lọc danh sách tham gia để loại bỏ những người đã thắng.
+ * @returns {Array} Danh sách người chơi đủ điều kiện.
+ */
+function getAvailableParticipants() {
+    // Tạo Set chứa tên người đã thắng để kiểm tra nhanh hơn
+    const winnerNames = new Set(winners.map(w => w.name)); 
+    // Lọc danh sách gốc (participants)
+    return participants.filter(p => !winnerNames.has(p));
+}
+
+/**
+ * Hiển thị hộp thoại hỏi người dùng có muốn Reset danh sách đã trúng thưởng không.
+ */
+function askForReset() {
+    loadWinners(); // Tải danh sách đã thắng trước
+
+    if (winners.length > 0) {
+        const confirmReset = confirm(
+            `Đã có ${winners.length} người trúng thưởng được lưu trữ. Bạn có muốn ĐẶT LẠI (RESET) danh sách trúng thưởng không?`
+        );
+
+        if (confirmReset) {
+            winners = [];
+            localStorage.removeItem('galaDrawWinners');
+            alert("Danh sách trúng thưởng đã được ĐẶT LẠI thành công!");
+        } else {
+            alert(`Tiếp tục quay thưởng với ${getAvailableParticipants().length} người chơi đủ điều kiện.`);
+        }
     }
 }
 
-@keyframes button-pulse {
-    0% {
-        box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7);
+// --- B. LOGIC QUAY SỐ ---
+
+/**
+ * Chọn ngẫu nhiên một người từ danh sách đủ điều kiện VÀ trả về VỊ TRÍ (Index) của người thắng cuộc.
+ * KHÔNG XÓA người thắng cuộc ngay tại đây.
+ */
+function selectRandomWinnerWithIndex() {
+    const availableParticipants = getAvailableParticipants();
+    
+    if (availableParticipants.length === 0) {
+        return { indexInAvailableList: -1, name: "HẾT NGƯỜI CHƠI" };
     }
-    70% {
-        box-shadow: 0 0 0 15px rgba(46, 204, 113, 0);
+
+    const randomIndex = Math.floor(Math.random() * availableParticipants.length);
+    const winnerName = availableParticipants[randomIndex];
+
+    return { 
+        indexInAvailableList: randomIndex, 
+        name: winnerName 
+    };
+}
+
+/**
+ * Xây dựng thanh cuộn Slot ảo bằng cách chèn tên đệm và tên người chiến thắng.
+ * @returns {number} Vị trí pixel (px) cần cuộn để dừng chính xác ở người thắng cuộc.
+ */
+function buildSlotRoller(availableParticipants, winnerIndex) {
+    slotRollerElement.innerHTML = ''; 
+    const rollerNames = [...availableParticipants]; // Sao chép danh sách đủ điều kiện
+
+    // 1. Thêm 10 tên ngẫu nhiên ban đầu để tạo đà cuộn
+    for (let i = 0; i < 10; i++) {
+        const randomIndex = Math.floor(Math.random() * availableParticipants.length);
+        rollerNames.push(availableParticipants[randomIndex]);
     }
-    100% {
-        box-shadow: 0 0 0 0 rgba(46, 204, 113, 0);
+
+    // 2. Thêm người chiến thắng vào cuối danh sách cuộn
+    const winnerName = availableParticipants[winnerIndex];
+    rollerNames.push(winnerName); 
+
+    // 3. Thêm 5 tên ngẫu nhiên nữa sau người chiến thắng để làm đệm dừng
+    for (let i = 0; i < 5; i++) {
+        const randomIndex = Math.floor(Math.random() * availableParticipants.length);
+        rollerNames.push(availableParticipants[randomIndex]);
     }
+
+    // 4. Đổ tên vào HTML
+    rollerNames.forEach(name => {
+        const div = document.createElement('div');
+        div.className = 'slot-name';
+        div.textContent = name;
+        slotRollerElement.appendChild(div);
+    });
+
+    // 5. Tính toán vị trí dừng
+    // Tổng số tên trước người thắng cuộc: 10 (đệm) + winnerIndex 
+    const totalNamesBeforeWinner = 10 + winnerIndex; 
+    // Lấy chiều cao của một mục tên (đảm bảo phải có ít nhất 1 mục)
+    const itemHeight = slotRollerElement.querySelector('.slot-name').offsetHeight;
+    
+    return totalNamesBeforeWinner * itemHeight;
 }
 
 
-/* --- CÁC QUY TẮC KÍCH HOẠT KHI CHẾ ĐỘ QUAY SỐ BẮT ĐẦU --- */
+/**
+ * Logic chính để khởi động hiệu ứng quay số và dừng tại người chiến thắng.
+ */
+function toggleSpin(slotDisplayWrapper, spinButton) {
+    const availableParticipants = getAvailableParticipants();
+    
+    if (isSpinning || availableParticipants.length === 0) {
+        if (availableParticipants.length === 0) slotRollerElement.innerHTML = '<div class="slot-name">HẾT NGƯỜI CHƠI</div>';
+        return;
+    }
 
-/* Ẩn danh sách giải thưởng và các nút cố định */
-.drawing-active #prizeListWrapper, 
-.drawing-active .fixed-controls-container {
-    display: none !important;
+    const winnerData = selectRandomWinnerWithIndex();
+    
+    // 1. CHUẨN BỊ VÀ TÍNH TOÁN
+    // Đảm bảo slotRollerElement đã được khởi tạo trước
+    if (!slotRollerElement) slotRollerElement = document.getElementById('slotRoller');
+    
+    const stopPosition = buildSlotRoller(availableParticipants, winnerData.indexInAvailableList);
+    
+    // --- BẮT ĐẦU QUAY ---
+    isSpinning = true;
+    spinButton.textContent = "ĐANG QUAY...";
+    spinButton.disabled = true;
+
+    // 2. KÍCH HOẠT HIỆU ỨNG CUỘN CSS (Cuộn nhanh)
+    slotRollerElement.style.transition = 'none';
+    slotRollerElement.style.transform = 'translateY(0)';
+    slotRollerElement.style.animation = 'slotRoll 0.1s linear infinite';
+    
+    // 3. DỪNG QUAY VÀ CHỌN KẾT QUẢ CUỐI CÙNG (Sau 1 giây cuộn nhanh)
+    const totalSpinTime = 25000; // Tổng thời gian quay: 25 giây
+    const quickSpinTime = 1000; // Cuộn nhanh: 1 giây
+    const smoothStopDuration = totalSpinTime - quickSpinTime; // Dừng mượt: 24 giây
+
+    setTimeout(() => {
+        // a. DỪNG HIỆU ỨNG CUỘN CSS và áp dụng transition dừng mượt
+        slotRollerElement.style.animation = 'none'; 
+        slotRollerElement.style.transition = `transform ${smoothStopDuration / 1000}s cubic-bezier(0.1, 0.7, 0.9, 1)`; 
+        
+        // b. DỊCH CHUYỂN ĐẾN VỊ TRÍ DỪNG
+        slotRollerElement.style.transform = `translateY(-${stopPosition}px)`; 
+        
+        // c. LOGIC KẾT THÚC (Sau khi transition dừng lại)
+        setTimeout(() => {
+            
+            // XÓA người chiến thắng khỏi danh sách đã thắng và lưu lại
+            winners.push({ name: winnerData.name, time: new Date().toISOString() }); 
+            saveWinners(); 
+            
+            isSpinning = false;
+            spinButton.textContent = "BẮT ĐẦU QUAY";
+            spinButton.disabled = false;
+            
+            alert(`🎉 CHÚC MỪNG: ${winnerData.name} đã trúng thưởng!`);
+            
+            // Đưa về trạng thái ban đầu sau khi quay xong
+            slotRollerElement.innerHTML = `<div class="slot-name">SẴN SÀNG</div>`;
+
+        }, smoothStopDuration); 
+
+    }, quickSpinTime); 
 }
 
-/* Thiết lập body cho màn hình quay số */
-.drawing-active {
-    font-family: 'Montserrat', sans-serif;
-    background: linear-gradient(135deg, #2c3e50, #34495e) !important; 
-    color: #ecf0f1;
-    display: flex !important;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-    overflow: hidden; 
-}
+// --- C. HÀM KHỞI TẠO CHUNG (Gắn vào DOMContentLoaded của prizes.js) ---
 
-/* HIỆN khu vực quay thưởng */
-.drawing-active #drawArea {
-    display: flex !important; 
-    flex-direction: column;
-    align-items: center;
-    position: relative; 
-    z-index: 100;
-}
+window.initDrawLogic = function() {
+    // 1. HỎI RESET KHI MỞ APP (Trước khi khởi tạo nút)
+    askForReset(); 
+    
+    // 2. LOGIC NÚT QUAY
+    const slotDisplayWrapper = document.getElementById('slotDisplayWrapper');
+    const spinButton = document.getElementById('spinButton');
+    slotRollerElement = document.getElementById('slotRoller'); // Gán element
 
-
-/* --- THIẾT KẾ CÁC PHẦN TỬ TRONG GIAO DIỆN QUAY SỐ --- */
-
-/* Trạng thái mặc định: Khu vực quay thưởng bị ẩn */
-#drawArea {
-    display: none; 
-}
-
-/* Khu vực hiển thị quay số */
-.draw-area {
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
-    padding: 60px; 
-    box-shadow: 0 0 80px rgba(255, 255, 0, 0.7); 
-    text-align: center;
-    border: 3px solid #f1c40f; 
-    perspective: 1000px; 
-    transition: all 0.5s ease-in-out;
-}
-
-/* Tiêu đề */
-.draw-title {
-    font-size: 3em;
-    color: #f1c40f; 
-    text-transform: uppercase;
-    margin-bottom: 30px;
-    animation: neon-glow 1.5s ease-in-out infinite alternate;
-}
-
-/* Hộp hiển thị kết quả đang quay (số/tên người chơi) */
-.spinning-display {
-    font-size: 7em;
-    font-weight: 900; 
-    min-width: 500px; 
-    min-height: 100px;
-    background: linear-gradient(145deg, #ffffff, #f0f0f0); 
-    color: #c0392b; 
-    border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 40px;
-    display: flex; 
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 255, 255, 0.3) inset;
-    border: 5px solid #e67e22; 
-    transform-style: preserve-3d; 
-    transition: transform 0.1s ease-out; 
-}
-
-/* Nút bắt đầu/dừng quay */
-.draw-button {
-    padding: 15px 40px;
-    font-size: 1.5em;
-    font-weight: bold;
-    color: #ffffff;
-    background-color: #2ecc71; 
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.1s, box-shadow 0.3s;
-    animation: button-pulse 2s infinite; 
-    box-shadow: 0 5px 0 #27ae60;
-}
-
-.draw-button:hover {
-    background-color: #27ae60;
-}
-
-.draw-button:active {
-    transform: translateY(4px);
-    box-shadow: 0 1px 0 #27ae60;
-    animation: none; 
-}
-
-/* Trạng thái nút bị vô hiệu hóa khi đang quay */
-.draw-button:disabled {
-    background-color: #95a5a6; 
-    box-shadow: 0 5px 0 #7f8c8d;
-    cursor: not-allowed;
-    animation: none;
-}
+    if (spinButton) {
+        spinButton.onclick = function() {
+            toggleSpin(slotDisplayWrapper, spinButton);
+        };
+    }
+};
