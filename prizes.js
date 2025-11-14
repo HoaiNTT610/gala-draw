@@ -7,7 +7,7 @@ const prizes = [
 ];
 
 // Biến lưu danh sách người trúng giải
-window.winners = [];
+window.winners = window.winners || [];
 
 // Kiểm tra danh sách người trúng giải khi mở app
 window.addEventListener("load", () => {
@@ -15,9 +15,9 @@ window.addEventListener("load", () => {
   if(storedWinners.length > 0){
     if(confirm("Có muốn reset lại danh sách người đã trúng giải không?")){
       localStorage.removeItem("winners");
-      winners = [];
+      window.winners = [];
     } else {
-      winners = storedWinners;
+      window.winners = storedWinners;
     }
   }
 
@@ -31,7 +31,7 @@ function renderPrizes() {
   const container = document.getElementById("prizes-list");
   container.innerHTML = "";
 
-  // Giải đầu tiên riêng trên hàng đầu tiên
+  // Giải đặc biệt riêng hàng đầu tiên, căn giữa
   const firstPrize = prizes[0];
   const firstDiv = document.createElement("div");
   firstDiv.className = "prize first-prize";
@@ -41,7 +41,10 @@ function renderPrizes() {
   `;
   container.appendChild(firstDiv);
 
-  // Các giải còn lại
+  // Container cho các giải còn lại
+  const otherContainer = document.createElement("div");
+  otherContainer.id = "other-prizes";
+
   for(let i=1; i<prizes.length; i++){
     const prize = prizes[i];
     const div = document.createElement("div");
@@ -50,8 +53,10 @@ function renderPrizes() {
       <img src="${prize.image}" alt="${prize.name}">
       <div>${prize.name} (${prize.quantity})</div>
     `;
-    container.appendChild(div);
+    otherContainer.appendChild(div);
   }
+
+  container.appendChild(otherContainer);
 }
 
 // =======================
@@ -61,20 +66,6 @@ const music = new Audio("sounds/open_program.mp3");
 music.volume = 0.2;
 let duringMusic = new Audio("sounds/during_process.mp3");
 duringMusic.loop = true;
-
-// =======================
-// Nút Quay
-// =======================
-document.getElementById("btn-draw").addEventListener("click", () => {
-  if(!music.paused) music.pause();
-  if(!duringMusic.paused) duringMusic.pause();
-
-  document.getElementById("prizes-screen").style.display = "none";
-  document.getElementById("draw-screen").style.display = "block";
-
-  duringMusic.currentTime = 0;
-  duringMusic.play();
-});
 
 // =======================
 // Nút Phát nhạc / Dừng nhạc
@@ -90,3 +81,26 @@ btnMusic.addEventListener("click", () => {
   }
 });
 
+// =======================
+// Nút Quay
+// =======================
+// Tạo nút Quay mới nếu chưa có
+let btnDraw = document.getElementById("btn-draw");
+if(!btnDraw){
+  btnDraw = document.createElement("button");
+  btnDraw.id = "btn-draw";
+  btnDraw.className = "floating-btn";
+  btnDraw.textContent = "Quay";
+  document.body.appendChild(btnDraw);
+}
+
+btnDraw.addEventListener("click", () => {
+  if(!music.paused) music.pause();
+  if(!duringMusic.paused) duringMusic.pause();
+
+  document.getElementById("prizes-screen").style.display = "none";
+  document.getElementById("draw-screen").style.display = "block";
+
+  duringMusic.currentTime = 0;
+  duringMusic.play();
+});
