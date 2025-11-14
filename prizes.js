@@ -14,9 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const specialContainer = document.getElementById('special-prize-output');
     const regularContainer = document.getElementById('regular-prizes-output');
     
-    // Lấy nút Quay
-    const floatingBackButton = document.getElementById('floatingBackButton');
-
     if (!specialContainer || !regularContainer) return; 
 
     // --- A. LOGIC HIỂN THỊ DANH SÁCH ---
@@ -86,3 +83,4 @@ document.addEventListener('DOMContentLoaded', () => {
 	
 
 });
+
