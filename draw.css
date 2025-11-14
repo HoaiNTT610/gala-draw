@@ -1,23 +1,151 @@
-/* draw.css */
+/* draw.css - GIAO DIỆN QUAY SỐ TRÚNG THƯỞNG CHUYÊN NGHIỆP */
 
-/* Mọi thứ trong file này CHỈ áp dụng khi body có class 'drawing-active' */
+/* --- THIẾT LẬP KEYFRAMES (Hoạt hình) --- */
 
-/* Ví dụ: Làm nền tối đi để tập trung vào khu vực quay thưởng */
+/* Hiệu ứng Phát sáng (Neon Glow) cho Tiêu đề */
+@keyframes neon-glow {
+    0%, 100% {
+        text-shadow: 0 0 5px #f1c40f, 0 0 10px #f1c40f, 0 0 20px #e67e22;
+    }
+    50% {
+        text-shadow: 0 0 10px #f1c40f, 0 0 30px #e67e22, 0 0 40px #f39c12;
+    }
+}
+
+/* Hiệu ứng Nhịp đập (Pulse) cho nút Bắt đầu */
+@keyframes button-pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 15px rgba(46, 204, 113, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(46, 204, 113, 0);
+    }
+}
+
+
+/* --- CÁC QUY TẮC KÍCH HOẠT KHI CHẾ ĐỘ QUAY SỐ BẮT ĐẦU --- */
+
+/* Ẩn danh sách giải thưởng khi chế độ quay số được kích hoạt */
+.drawing-active #prizeListWrapper, 
+.drawing-active .fixed-controls-container {
+    display: none !important;
+}
+
+/* Thiết lập body cho màn hình quay số */
 .drawing-active {
-    background: #1c2833 !important; /* Nền tối đậm */
-    transition: background 1s ease-in-out;
+    font-family: 'Montserrat', sans-serif;
+    /* Nền gradient tối kịch tính */
+    background: linear-gradient(135deg, #2c3e50, #34495e) !important; 
+    color: #ecf0f1;
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    overflow: hidden; /* Tránh thanh cuộn khi hiệu ứng được kích hoạt */
 }
 
-/* Ví dụ: Làm mờ tất cả các thẻ giải thưởng khác */
-.drawing-active .prize-card {
-    opacity: 0.3;
-    filter: blur(2px);
-    transition: opacity 0.5s, filter 0.5s;
+/* HIỆN khu vực quay thưởng và áp dụng style kịch tính */
+.drawing-active #drawArea {
+    display: flex !important; /* Kích hoạt Flexbox cho draw-area (Xem index.html) */
+    flex-direction: column;
+    align-items: center;
+    
+    /* Vị trí trên cùng */
+    position: relative; 
+    z-index: 100;
 }
 
-/* Ví dụ: Làm nổi bật một khu vực quay thưởng (nếu có thẻ HTML riêng) */
-.drawing-active #draw-area {
-    display: block;
-    transform: scale(1.1);
-    box-shadow: 0 0 50px rgba(255, 255, 0, 0.8);
+
+/* --- THIẾT KẾ CÁC PHẦN TỬ TRONG GIAO DIỆN QUAY SỐ --- */
+
+/* Khu vực hiển thị quay số */
+.draw-area {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 60px; 
+    /* Hiệu ứng ánh sáng vàng mạnh mẽ */
+    box-shadow: 0 0 80px rgba(255, 255, 0, 0.7); 
+    text-align: center;
+    border: 3px solid #f1c40f; 
+    perspective: 1000px; /* Thêm chiều sâu 3D */
+    transition: all 0.5s ease-in-out;
+}
+
+/* Tiêu đề */
+.draw-title {
+    font-size: 3em;
+    color: #f1c40f; 
+    text-transform: uppercase;
+    margin-bottom: 30px;
+    
+    /* Áp dụng hiệu ứng Phát sáng */
+    animation: neon-glow 1.5s ease-in-out infinite alternate;
+}
+
+/* Hộp hiển thị kết quả đang quay (số/tên người chơi) */
+.spinning-display {
+    font-size: 7em;
+    font-weight: 900; /* Rất đậm */
+    min-width: 500px; 
+    min-height: 100px;
+    /* Gradient trắng tinh tế */
+    background: linear-gradient(145deg, #ffffff, #f0f0f0); 
+    color: #c0392b; /* Đỏ đô mạnh mẽ */
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 40px;
+    display: flex; /* Dùng Flexbox để căn giữa chữ */
+    justify-content: center;
+    align-items: center;
+    
+    /* Hiệu ứng bóng đổ và ánh sáng */
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 255, 255, 0.3) inset;
+    border: 5px solid #e67e22; 
+    
+    /* Thiết lập 3D và transition cho JS */
+    transform-style: preserve-3d; 
+    transition: transform 0.1s ease-out; 
+}
+
+/* Nút bắt đầu/dừng quay */
+.draw-button {
+    padding: 15px 40px;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #2ecc71; 
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s, box-shadow 0.3s;
+    
+    /* Áp dụng hiệu ứng Nhịp đập */
+    animation: button-pulse 2s infinite; 
+    
+    /* Thêm độ sâu */
+    box-shadow: 0 5px 0 #27ae60;
+}
+
+.draw-button:hover {
+    background-color: #27ae60;
+}
+
+.draw-button:active {
+    /* Hiệu ứng nhấn nút lún xuống */
+    transform: translateY(4px);
+    box-shadow: 0 1px 0 #27ae60;
+    animation: none; /* Dừng hiệu ứng pulse khi nhấn */
+}
+
+/* Trạng thái nút bị vô hiệu hóa khi đang quay */
+.draw-button:disabled {
+    background-color: #95a5a6; /* Xám */
+    box-shadow: 0 5px 0 #7f8c8d;
+    cursor: not-allowed;
+    animation: none;
 }
