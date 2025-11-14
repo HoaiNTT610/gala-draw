@@ -8,7 +8,7 @@ const prizeData = [
         quantity: "01", 
         image: "images/airfryer.jpg", 
         isSpecial: true,
-        specs: "SỬ DỤNG 5L, 1350W - CÀI ĐẶT TỐI ĐA 200°C, 60 PHÚT" // Cập nhật specs để khắc phục lỗi undefined
+        specs: "SỬ DỤNG 5L, 1350W - CÀI ĐẶT TỐI ĐA 200°C, 60 PHÚT" 
     },
     { 
         name: "Giải Nhất", 
@@ -26,7 +26,7 @@ const prizeData = [
         isSpecial: false,
         specs: "Công suất 350W, Cối thủy tinh 1.5L"
     },
-    // Thêm các giải thưởng khác vào đây
+    // THÊM CÁC GIẢI THƯỞNG KHÁC VÀO ĐÂY
 ];
 
 // Hàm tạo thẻ giải thưởng (Card)
@@ -34,7 +34,7 @@ function createPrizeCard(prize) {
     const card = document.createElement('div');
     card.className = prize.isSpecial ? 'prize-card special-prize' : 'prize-card';
 
-    // Đảm bảo sử dụng thuộc tính 'specs' hoặc 'description'
+    // Đảm bảo sử dụng thuộc tính 'specs' và kiểm tra null
     const specsHtml = prize.specs ? `<p class="specs">${prize.specs}</p>` : '';
 
     card.innerHTML = `
@@ -57,6 +57,12 @@ function renderPrizes() {
     const specialOutput = document.getElementById('special-prize-output');
     const regularOutput = document.getElementById('regular-prizes-output');
     
+    // Đảm bảo các container tồn tại trước khi thao tác
+    if (!specialOutput || !regularOutput) {
+        console.error("Lỗi: Không tìm thấy container hiển thị giải thưởng (special-prize-output hoặc regular-prizes-output).");
+        return;
+    }
+    
     specialOutput.innerHTML = '';
     regularOutput.innerHTML = '';
 
@@ -75,10 +81,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // RENDER GIẢI THƯỞNG
     renderPrizes();
 
-    // KHAI BÁO BIẾN CHO CÁC NÚT VÀ AUDIO (Đảm bảo CHỈ KHAI BÁO MỘT LẦN!)
+    // KHAI BÁO BIẾN CHO CÁC NÚT VÀ AUDIO (PHẢI LÀ MỘT LẦN DUY NHẤT ĐỂ TRÁNH LỖI SyntaxError)
     const backgroundMusic = document.getElementById('backgroundMusic');
     const rollMusic = document.getElementById('rollMusic');
-    const floatingBackButton = document.getElementById('floatingBackButton');
+    const floatingBackButton = document.getElementById('floatingBackButton'); // Nút Quay
     const musicToggleButton = document.getElementById('musicToggleButton');
     const bodyElement = document.body;
 
@@ -90,8 +96,9 @@ document.addEventListener('DOMContentLoaded', () => {
             backgroundMusic.pause();
             musicToggleButton.textContent = 'Phát nhạc';
         } else {
+            // Cần tương tác người dùng lần đầu để phát nhạc tự động
             backgroundMusic.play().catch(error => {
-                console.log("Không thể tự động phát nhạc. Vui lòng tương tác với trang.");
+                console.warn("Không thể tự động phát nhạc. Vui lòng tương tác với trang.");
             });
             musicToggleButton.textContent = 'Dừng nhạc';
         }
@@ -102,10 +109,10 @@ document.addEventListener('DOMContentLoaded', () => {
         musicToggleButton.onclick = toggleMusic;
     }
 
-    // --- LOGIC CHUYỂN ĐỔI MÀN HÌNH QUAY THƯỞNG (Quan trọng) ---
+    // --- LOGIC CHUYỂN ĐỔI MÀN HÌNH QUAY THƯỞNG ---
     if (floatingBackButton) {
         floatingBackButton.onclick = function() {
-            // 1. CHUYỂN ĐỔI GIAO DIỆN
+            // 1. CHUYỂN ĐỔI GIAO DIỆN (Thêm/Bỏ class 'drawing-active' trên body)
             bodyElement.classList.toggle('drawing-active'); 
             
             // 2. XỬ LÝ NHẠC
@@ -113,9 +120,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Đã chuyển sang màn hình quay thưởng
                 console.log("Chuyển đổi sang giao diện quay thưởng!");
                 backgroundMusic.pause();
-                rollMusic.play().catch(error => console.log("Không thể phát nhạc quay thưởng."));
+                rollMusic.play().catch(error => console.warn("Không thể phát nhạc quay thưởng."));
                 
-                // 3. KHỞI TẠO LOGIC QUAY SỐ (TỪ draw.js)
+                // 3. KHỞI TẠO LOGIC QUAY SỐ (Gọi hàm từ draw.js)
                 if (window.initDrawLogic) {
                     window.initDrawLogic();
                 }
@@ -124,15 +131,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Quay lại màn hình giải thưởng
                 rollMusic.pause();
                 rollMusic.currentTime = 0;
-                // Nếu người dùng đã bật nhạc nền, phát lại
+                // Nếu nhạc nền đã bật, phát lại
                 if (isMusicPlaying) {
-                     backgroundMusic.play().catch(error => console.log("Không thể phát nhạc nền."));
+                     backgroundMusic.play().catch(error => console.warn("Không thể phát nhạc nền."));
                 }
             }
         };
     }
     
-    // Nếu hàm initDrawLogic đã được khai báo, gọi nó (chủ yếu để chạy askForReset())
+    // Nếu app được tải lại trong trạng thái quay thưởng (ví dụ: F5), gọi initDrawLogic
     if (bodyElement.classList.contains('drawing-active') && window.initDrawLogic) {
         window.initDrawLogic();
     }
