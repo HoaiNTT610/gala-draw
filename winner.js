@@ -1,27 +1,19 @@
+const winSound = new Audio("sounds/win_sound.mp3");
+
 function showWinner(winner) {
-document.getElementById("draw-screen").classList.add("hidden");
-document.getElementById("winner-screen").classList.remove("hidden");
-
-
-document.getElementById("winner-name").innerText = winner.name;
-document.getElementById("winner-dept").innerText = winner.dept;
-
-
-const winSound = document.getElementById("win-sound");
-winSound.currentTime = 0;
-winSound.play();
+  document.getElementById("winner-name").textContent = winner.name;
+  document.getElementById("winner-department").textContent = winner.department;
+  document.getElementById("winner-screen").style.display = "block";
+  winSound.play();
 }
 
+document.getElementById("btn-next").addEventListener("click", () => {
+  document.getElementById("winner-screen").style.display = "none";
+  document.getElementById("draw-screen").style.display = "block";
+  duringMusic.currentTime = 0;
+  duringMusic.play();
+});
 
-document.getElementById("btn-close").onclick = () => {
-window.close();
-};
-
-
-document.getElementById("btn-next-spin").onclick = () => {
-document.getElementById("winner-screen").classList.add("hidden");
-document.getElementById("draw-screen").classList.remove("hidden");
-during.currentTime = 0;
-during.play();
-spinWheel();
-};
+document.getElementById("btn-close").addEventListener("click", () => {
+  window.close();
+});
