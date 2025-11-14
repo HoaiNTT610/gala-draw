@@ -1,215 +1,26 @@
-/* draw.css - GIAO DIỆN VÒNG QUAY MAY MẮN CHUYÊN NGHIỆP */
-
-/* --- THIẾT LẬP KEYFRAMES --- */
-
-/* Hiệu ứng Phát sáng (Neon Glow) cho Tiêu đề */
-@keyframes neon-glow {
-    0%, 100% {
-        text-shadow: 0 0 5px #f1c40f, 0 0 10px #f1c40f, 0 0 20px #e67e22;
-    }
-    50% {
-        text-shadow: 0 0 10px #f1c40f, 0 0 30px #e67e22, 0 0 40px #f39c12;
-    }
+#draw-screen {
+display: flex;
+justify-content: center;
+align-items: center;
+height: 100vh;
 }
 
-/* Hiệu ứng Nhịp đập (Pulse) cho nút Bắt đầu */
-@keyframes button-pulse {
-    0% {
-        box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7);
-    }
-    70% {
-        box-shadow: 0 0 0 20px rgba(46, 204, 113, 0);
-    }
-    100% {
-        box-shadow: 0 0 0 0 rgba(46, 204, 113, 0);
-    }
-}
-
-
-/* --- KIỂM SOÁT ẨN/HIỆN (Sử dụng bởi prizes.js) --- */
-
-/* Ẩn danh sách giải thưởng và các nút cố định */
-.drawing-active #prizeListWrapper, 
-.drawing-active .fixed-controls-container {
-    display: none !important;
-}
-
-/* Thiết lập body cho màn hình quay số */
-.drawing-active {
-    font-family: 'Montserrat', sans-serif;
-    background: linear-gradient(135deg, #2c3e50, #34495e) !important; /* Nền tối kịch tính */
-    color: #ecf0f1;
-    display: flex !important;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-    overflow: hidden; 
-}
-
-/* HIỆN khu vực quay thưởng */
-#drawArea {
-    display: none; /* Mặc định ẩn */
-}
-.drawing-active #drawArea {
-    display: flex !important; 
-    flex-direction: column;
-    align-items: center;
-    position: relative; 
-    z-index: 100;
-}
-
-/* Khu vực hiển thị quay số */
-.draw-area {
-    padding: 30px 60px; 
-    text-align: center;
-}
-
-/* Tiêu đề */
-.draw-title {
-    font-size: 3em;
-    color: #f1c40f; 
-    text-transform: uppercase;
-    margin-bottom: 30px;
-    animation: neon-glow 1.5s ease-in-out infinite alternate;
-}
-
-/* --- THIẾT KẾ VÒNG QUAY MAY MẮN --- */
 
 .wheel-container {
-    width: 600px;
-    height: 600px;
-    position: relative;
-    border-radius: 50%;
-    overflow: hidden;
-    margin-bottom: 40px;
-    
-    border: 5px solid #ffdf00;
-    box-shadow: 0 0 50px rgba(255, 223, 0, 0.9);
-}
-
-.lucky-wheel {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    border-radius: 50%;
-    
-    background: radial-gradient(circle, #f39c12, #e67e22);
-    
-    transition: transform 0s linear; 
-}
-
-/* Kim chỉ/Mũi tên */
-.wheel-pointer {
-    width: 0;
-    height: 0;
-    border-left: 20px solid transparent;
-    border-right: 20px solid transparent;
-    border-top: 50px solid #c0392b; 
-    position: absolute;
-    top: -30px; 
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 20;
-    filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.7));
-}
-
-/* --- ĐỊNH VỊ CÁC MỤC TÊN TRÊN VÒNG QUAY --- */
-
-.wheel-segment {
-    width: 50%;
-    height: 50%;
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform-origin: 0% 100%; 
-    overflow: hidden;
-    
-    font-size: 1.1em;
-    font-weight: bold;
-    color: #2c3e50;
-    
-    display: flex;
-    justify-content: center;
-    align-items: center; 
-    
-    border-right: 1px solid rgba(0, 0, 0, 0.2);
-}
-
-.wheel-segment:nth-child(odd) {
-    background-color: #f7dc6f; 
-}
-.wheel-segment:nth-child(even) {
-    background-color: #f1c40f; 
-}
-
-/* Container cho tên để tên không bị nghiêng theo segment */
-.wheel-segment > div {
-    position: relative;
-    transform-origin: 50% 50%;
-    text-align: center;
-    padding-top: 100px; 
-    width: 100%;
+position: relative;
 }
 
 
-/* --- ĐỊNH VỊ NÚT QUAY Ở GIỮA --- */
-
-.center-button-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 10; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    
-    border: 8px solid rgba(255, 255, 255, 0.2);
-    border-radius: 50%; 
-    box-shadow: 0 0 20px #ffffff inset, 0 0 20px #ffffff;
-    pointer-events: none; 
-}
-
-.draw-button {
-    padding: 15px 40px;
-    font-size: 1.3em;
-    font-weight: bold;
-    color: #ffffff;
-    background-color: #2ecc71; 
-    border: none;
-    border-radius: 50%; 
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.1s, box-shadow 0.3s;
-    
-    animation: button-pulse 2s infinite; 
-    box-shadow: 0 5px 0 #27ae60;
-    
-    width: 150px; 
-    height: 150px;
-    line-height: 1.2; 
-
-    pointer-events: auto; 
-    z-index: 11; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-}
-
-.draw-button:active {
-    transform: translateY(4px);
-    box-shadow: 0 1px 0 #27ae60;
-    animation: none; 
-}
-
-.draw-button:disabled {
-    background-color: #95a5a6; 
-    box-shadow: 0 5px 0 #7f8c8d;
-    cursor: not-allowed;
-    animation: none;
+.spin-btn {
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+padding: 20px 40px;
+font-size: 22px;
+border-radius: 12px;
+background: #ff5722;
+color: white;
+border: none;
+cursor: pointer;
 }
