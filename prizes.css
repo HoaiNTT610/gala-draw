@@ -15,7 +15,7 @@ body {
         /* Lớp phủ (Overlay): Dùng gradient để làm mờ ảnh và tăng độ tương phản */
         linear-gradient(rgba(240, 248, 255, 0.85), rgba(230, 233, 240, 0.95)), 
         /* Đường dẫn ảnh thực tế */
-        url('images/background.jpg'); 
+        url('/gala-draw/images/background.jpg'); 
         
     /* 2. Cấu hình ảnh nền */
     background-size: cover; /* Đảm bảo ảnh luôn bao phủ toàn bộ màn hình */
@@ -218,4 +218,5 @@ body {
     .floating-back-button {
         right: 15px; /* Dịch nút vào trong */
     }
+
 }
