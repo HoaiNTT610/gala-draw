@@ -1,67 +1,58 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Giải Thưởng</title>
-
-    <base href="/gala-draw/" /> 
-    
-    <link rel="stylesheet" href="prizes.css">
-    <link rel="stylesheet" href="draw.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Gala Draw - Danh sách giải thưởng</title>
+<link rel="stylesheet" href="prizes.css" />
+<link rel="stylesheet" href="draw.css" />
+<link rel="stylesheet" href="winner.css" />
 </head>
 <body>
 
-    <div id="prizeListWrapper">
-        <h1 class="prize-list-header">🎉 GIẢI THƯỞNG 🎉</h1>
-        <div class="special-prize-wrapper" id="special-prize-output">
-            </div>
-        <div class="prize-container" id="regular-prizes-output">
-            </div>
-    </div>
-    
-    <div id="drawArea" class="draw-area"> 
-    <h2 class="draw-title">VÒNG QUAY MAY MẮN!</h2>
-    
-    <div class="wheel-container" id="wheelContainer">
-        
-        <div class="lucky-wheel" id="luckyWheel">
-            </div>
-        
-        <div class="wheel-pointer"></div>
 
-        <div class="center-button-overlay">
-            <button id="spinButton" class="draw-button">
-                BẮT ĐẦU QUAY
-            </button>
-        </div>
-    </div>
+<!-- ===================== MÀN HÌNH DANH SÁCH GIẢI THƯỞNG =================== -->
+<section id="prizes-screen" class="screen active">
+<h1 class="title">Danh sách giải thưởng</h1>
 
 
-    <div class="fixed-controls-container">
-        <button id="floatingBackButton" class="control-button" title="Quay số">
-            Quay
-        </button>
+<div id="prize-list"></div>
 
-        <button id="musicToggleButton" class="control-button" title="Nhạc">
-            Phát nhạc
-        </button>
-    </div>
 
-    <audio id="backgroundMusic" loop>
-        <source src="sounds/open_song.mp3" type="audio/mp3"> 
-        Trình duyệt của bạn không hỗ trợ thẻ audio.
-    </audio>
+<div class="floating-buttons">
+<button id="btn-start-draw" class="primary-btn">Quay</button>
+<button id="btn-music" class="secondary-btn">Phát nhạc</button>
+</div>
+</section>
 
-    <audio id="rollMusic">
-        <source src="sounds/background_music.mp3" type="audio/mp3"> 
-        Trình duyệt của bạn không hỗ trợ thẻ audio.
-    </audio>
-    
-    <script src="draw.js"></script> 
-    <script src="prizes.js"></script>
-    
+
+<!-- ===================== MÀN HÌNH QUAY SỐ ================================ -->
+<section id="draw-screen" class="screen hidden">
+<div class="wheel-container">
+<canvas id="wheel-canvas" width="500" height="500"></canvas>
+<button id="btn-spin" class="spin-btn">Quay</button>
+</div>
+</section>
+
+
+<!-- ===================== MÀN HÌNH NGƯỜI TRÚNG GIẢI ======================== -->
+<section id="winner-screen" class="screen hidden">
+<div class="winner-box">
+<h1 id="winner-name"></h1>
+<h2 id="winner-dept"></h2>
+<audio id="win-sound" src="sounds/win_sound.mp3"></audio>
+
+
+<div class="winner-buttons">
+<button id="btn-next-spin" class="primary-btn">Quay tiếp</button>
+<button id="btn-close" class="secondary-btn">Đóng</button>
+</div>
+</div>
+</section>
+
+
+<script src="prizes.js"></script>
+<script src="draw.js"></script>
+<script src="winner.js"></script>
 </body>
 </html>
-
