@@ -1,58 +1,39 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Gala Draw - Danh sách giải thưởng</title>
-<link rel="stylesheet" href="prizes.css" />
-<link rel="stylesheet" href="draw.css" />
-<link rel="stylesheet" href="winner.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gala Draw</title>
+  <link rel="stylesheet" href="prizes.css">
+  <link rel="stylesheet" href="draw.css">
+  <link rel="stylesheet" href="winner.css">
 </head>
 <body>
+  <!-- Màn hình danh sách giải thưởng -->
+  <div id="prizes-screen">
+    <div id="prizes-list"></div>
+    <button id="btn-draw" class="floating-btn">Quay</button>
+    <button id="btn-music" class="floating-btn">Phát nhạc</button>
+  </div>
 
+  <!-- Màn hình quay số trúng thưởng -->
+  <div id="draw-screen" style="display:none;">
+    <div id="wheel-container">
+      <canvas id="wheel" width="500" height="500"></canvas>
+      <button id="btn-spin" class="center-btn">Quay</button>
+    </div>
+  </div>
 
-<!-- ===================== MÀN HÌNH DANH SÁCH GIẢI THƯỞNG =================== -->
-<section id="prizes-screen" class="screen active">
-<h1 class="title">Danh sách giải thưởng</h1>
+  <!-- Màn hình thông báo người trúng giải -->
+  <div id="winner-screen" style="display:none;">
+    <h1 id="winner-name"></h1>
+    <p id="winner-department"></p>
+    <button id="btn-next" class="floating-btn">Quay tiếp</button>
+    <button id="btn-close" class="floating-btn">Đóng</button>
+  </div>
 
-
-<div id="prize-list"></div>
-
-
-<div class="floating-buttons">
-<button id="btn-start-draw" class="primary-btn">Quay</button>
-<button id="btn-music" class="secondary-btn">Phát nhạc</button>
-</div>
-</section>
-
-
-<!-- ===================== MÀN HÌNH QUAY SỐ ================================ -->
-<section id="draw-screen" class="screen hidden">
-<div class="wheel-container">
-<canvas id="wheel-canvas" width="500" height="500"></canvas>
-<button id="btn-spin" class="spin-btn">Quay</button>
-</div>
-</section>
-
-
-<!-- ===================== MÀN HÌNH NGƯỜI TRÚNG GIẢI ======================== -->
-<section id="winner-screen" class="screen hidden">
-<div class="winner-box">
-<h1 id="winner-name"></h1>
-<h2 id="winner-dept"></h2>
-<audio id="win-sound" src="sounds/win_sound.mp3"></audio>
-
-
-<div class="winner-buttons">
-<button id="btn-next-spin" class="primary-btn">Quay tiếp</button>
-<button id="btn-close" class="secondary-btn">Đóng</button>
-</div>
-</div>
-</section>
-
-
-<script src="prizes.js"></script>
-<script src="draw.js"></script>
-<script src="winner.js"></script>
+  <script src="prizes.js"></script>
+  <script src="draw.js"></script>
+  <script src="winner.js"></script>
 </body>
 </html>
