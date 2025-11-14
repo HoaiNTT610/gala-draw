@@ -16,12 +16,11 @@
   box-shadow: 0 0 20px rgba(0,0,0,0.3);
 }
 
-.wheel {
-  width: 100%;
-  height: 100%;
+#wheel {
+  width: 400px;
+  height: 400px;
   position: relative;
   border-radius: 50%;
-  transform: rotate(0deg);
   transition: transform 5s cubic-bezier(0.33, 1, 0.68, 1);
 }
 
@@ -32,9 +31,10 @@
   top: 50%;
   left: 50%;
   transform-origin: 0% 0%;
-  border: 2px solid #fff; /* viền giữa các cánh */
-  border-radius: 0 100% 0 0;
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+  border: 1px solid #fff;
 }
+
 
 .spin-btn {
   position: absolute;
@@ -51,3 +51,4 @@
   z-index: 10;
   box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
+
