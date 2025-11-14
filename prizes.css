@@ -1,20 +1,35 @@
+/* Container danh sách giải thưởng */
 #prizes-list {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
   padding: 20px;
+  justify-content: center; /* căn giữa các giải */
 }
 
+/* Giải thưởng chung */
 .prize {
   text-align: center;
   width: 150px;
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
-.prize:first-child {
-  border: 3px solid gold;
-  transform: scale(1.1);
+/* Giải đầu tiên luôn nổi bật, nằm riêng hàng trên cùng */
+.prize.first-prize {
+  width: 200px;
+  transform: scale(1.2);
+  box-shadow: 0 0 20px gold;
+  border-radius: 10px;
+  margin-bottom: 40px;
 }
 
+/* Hình ảnh giải thưởng */
+.prize img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+/* Nút tròn cố định dưới góc phải */
 .floating-btn {
   position: fixed;
   bottom: 20px;
@@ -26,4 +41,16 @@
   cursor: pointer;
   z-index: 1000;
   margin-left: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ff5722;
+  color: white;
+  border: none;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  transition: transform 0.2s;
+}
+
+.floating-btn:hover {
+  transform: scale(1.1);
 }
