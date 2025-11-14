@@ -1,77 +1,29 @@
-body {
-margin: 0;
-padding: 0;
-color: #333;
+#prizes-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px;
 }
 
-
-.screen.hidden { display: none; }
-.screen.active { display: block; }
-
-
-.title {
-text-align: center;
-padding: 20px 0;
-font-size: 32px;
-font-weight: bold;
+.prize {
+  text-align: center;
+  width: 150px;
 }
 
-
-#prize-list {
-display: grid;
-grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-gap: 20px;
-padding: 20px;
+.prize:first-child {
+  border: 3px solid gold;
+  transform: scale(1.1);
 }
 
-
-.prize-item {
-background: white;
-border-radius: 12px;
-padding: 10px;
-text-align: center;
-box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-transition: transform 0.2s;
-}
-.prize-item:hover { transform: scale(1.05); }
-
-
-.prize-item img {
-width: 100%;
-border-radius: 10px;
-}
-
-
-.prize-main {
-border: 3px solid gold;
-box-shadow: 0 0 20px gold;
-}
-
-
-.floating-buttons {
-position: fixed;
-bottom: 20px;
-right: 20px;
-display: flex;
-flex-direction: column;
-gap: 10px;
-}
-
-
-.primary-btn, .secondary-btn {
-padding: 12px 20px;
-border-radius: 8px;
-border: none;
-cursor: pointer;
-font-size: 16px;
-}
-
-
-.primary-btn {
-background: #ff5722;
-color: white;
-}
-.secondary-btn {
-background: #ffffffcc;
-border: 1px solid #555;
+.floating-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  font-size: 14px;
+  cursor: pointer;
+  z-index: 1000;
+  margin-left: 10px;
 }
