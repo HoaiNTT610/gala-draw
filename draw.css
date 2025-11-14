@@ -62,7 +62,7 @@
 
 /* Khu vực hiển thị quay số */
 .draw-area {
-    padding: 30px 60px; /* Giảm padding ngang để tập trung vào vòng quay */
+    padding: 30px 60px; 
     text-align: center;
 }
 
@@ -78,7 +78,6 @@
 /* --- THIẾT KẾ VÒNG QUAY MAY MẮN --- */
 
 .wheel-container {
-    /* Đặt kích thước cho toàn bộ khu vực vòng quay */
     width: 600px;
     height: 600px;
     position: relative;
@@ -86,7 +85,6 @@
     overflow: hidden;
     margin-bottom: 40px;
     
-    /* Hiệu ứng viền phát sáng */
     border: 5px solid #ffdf00;
     box-shadow: 0 0 50px rgba(255, 223, 0, 0.9);
 }
@@ -101,7 +99,6 @@
     
     background: radial-gradient(circle, #f39c12, #e67e22);
     
-    /* Thiết lập transition cho hiệu ứng xoay (sẽ được ghi đè trong JS) */
     transition: transform 0s linear; 
 }
 
@@ -111,9 +108,9 @@
     height: 0;
     border-left: 20px solid transparent;
     border-right: 20px solid transparent;
-    border-top: 50px solid #c0392b; /* Màu đỏ đô */
+    border-top: 50px solid #c0392b; 
     position: absolute;
-    top: -30px; /* Đặt phía trên vòng quay */
+    top: -30px; 
     left: 50%;
     transform: translateX(-50%);
     z-index: 20;
@@ -131,25 +128,22 @@
     transform-origin: 0% 100%; 
     overflow: hidden;
     
-    /* Định kiểu chữ bên trong */
     font-size: 1.1em;
     font-weight: bold;
     color: #2c3e50;
     
-    /* Đảm bảo tên được đặt gần tâm và không bị cắt */
     display: flex;
     justify-content: center;
     align-items: center; 
     
-    /* Thêm viền phân cách */
     border-right: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .wheel-segment:nth-child(odd) {
-    background-color: #f7dc6f; /* Vàng nhạt */
+    background-color: #f7dc6f; 
 }
 .wheel-segment:nth-child(even) {
-    background-color: #f1c40f; /* Vàng đậm */
+    background-color: #f1c40f; 
 }
 
 /* Container cho tên để tên không bị nghiêng theo segment */
@@ -157,7 +151,7 @@
     position: relative;
     transform-origin: 50% 50%;
     text-align: center;
-    padding-top: 100px; /* Đẩy tên ra xa tâm hơn */
+    padding-top: 100px; 
     width: 100%;
 }
 
@@ -175,7 +169,6 @@
     justify-content: center;
     align-items: center;
     
-    /* Viền trang trí ở giữa */
     border: 8px solid rgba(255, 255, 255, 0.2);
     border-radius: 50%; 
     box-shadow: 0 0 20px #ffffff inset, 0 0 20px #ffffff;
@@ -189,7 +182,7 @@
     color: #ffffff;
     background-color: #2ecc71; 
     border: none;
-    border-radius: 50%; /* Nút hình tròn */
+    border-radius: 50%; 
     cursor: pointer;
     transition: background-color 0.3s, transform 0.1s, box-shadow 0.3s;
     
@@ -198,7 +191,7 @@
     
     width: 150px; 
     height: 150px;
-    line-height: 1.2; /* Căn chỉnh chữ */
+    line-height: 1.2; 
 
     pointer-events: auto; 
     z-index: 11; 
