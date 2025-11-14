@@ -1,68 +1,23 @@
 /* draw.css */
 
-/* Thiết lập font và nền kịch tính */
-body {
-    font-family: 'Montserrat', sans-serif;
-    background: linear-gradient(135deg, #2c3e50, #3498db); /* Nền gradient tối */
-    color: #ecf0f1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
+/* Mọi thứ trong file này CHỈ áp dụng khi body có class 'drawing-active' */
+
+/* Ví dụ: Làm nền tối đi để tập trung vào khu vực quay thưởng */
+.drawing-active {
+    background: #1c2833 !important; /* Nền tối đậm */
+    transition: background 1s ease-in-out;
 }
 
-/* Khu vực hiển thị quay số */
-.draw-area {
-    background-color: rgba(0, 0, 0, 0.4);
-    border-radius: 20px;
-    padding: 50px;
-    box-shadow: 0 0 50px rgba(255, 255, 0, 0.5); /* Ánh sáng vàng */
-    text-align: center;
+/* Ví dụ: Làm mờ tất cả các thẻ giải thưởng khác */
+.drawing-active .prize-card {
+    opacity: 0.3;
+    filter: blur(2px);
+    transition: opacity 0.5s, filter 0.5s;
 }
 
-/* Tiêu đề */
-.draw-title {
-    font-size: 3em;
-    color: #f1c40f; /* Vàng tươi */
-    text-transform: uppercase;
-    margin-bottom: 30px;
-}
-
-/* Hộp hiển thị kết quả đang quay (số/tên người chơi) */
-.spinning-display {
-    font-size: 6em;
-    font-weight: bold;
-    min-width: 400px;
-    min-height: 100px;
-    background-color: #ffffff;
-    color: #e74c3c; /* Đỏ */
-    border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 40px;
-    /* Thêm hiệu ứng quay số bằng JS, CSS này chỉ định hình */
-    border: 5px solid #f39c12;
-    overflow: hidden;
-}
-
-/* Nút bắt đầu/dừng quay */
-.draw-button {
-    padding: 15px 40px;
-    font-size: 1.5em;
-    font-weight: bold;
-    color: #ffffff;
-    background-color: #2ecc71; /* Xanh lá */
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.1s;
-}
-
-.draw-button:hover {
-    background-color: #27ae60;
-}
-
-.draw-button:active {
-    transform: scale(0.98);
+/* Ví dụ: Làm nổi bật một khu vực quay thưởng (nếu có thẻ HTML riêng) */
+.drawing-active #draw-area {
+    display: block;
+    transform: scale(1.1);
+    box-shadow: 0 0 50px rgba(255, 255, 0, 0.8);
 }
