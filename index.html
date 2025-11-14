@@ -17,10 +17,12 @@
   </div>
 
   <!-- Màn hình quay số trúng thưởng -->
-  <div id="draw-screen" style="display:none;">
-    <div id="wheel-container">
-      <canvas id="wheel" width="500" height="500"></canvas>
-      <button id="btn-spin" class="center-btn">Quay</button>
+  <div id="draw-screen">
+    <div class="wheel-container">
+      <div class="wheel" id="wheel">
+        <!-- 15 cánh sẽ được tạo bằng JS -->
+      </div>
+      <button class="spin-btn" onclick="spinWheel()">Quay</button>
     </div>
   </div>
 
@@ -37,3 +39,4 @@
   <script src="winner.js"></script>
 </body>
 </html>
+
