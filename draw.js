@@ -15,8 +15,27 @@ console.log(window.winners); // kiểm tra danh sách người trúng giải
 window.winners = window.winners || JSON.parse(localStorage.getItem("winners")) || [];
 
 function drawWheel() {
-  // Vẽ bánh xe may mắn (simple colors + labels)
+    const wheel = document.getElementById("wheel");
+    wheel.innerHTML = ""; 
+
+    const totalSlices = 15;
+    const sliceAngle = 360 / totalSlices;
+
+    for (let i = 0; i < totalSlices; i++) {
+        const slice = document.createElement("div");
+        slice.classList.add("slice");
+        slice.style.transform = `rotate(${i * sliceAngle}deg)`;
+        slice.style.background = i % 2 === 0 ? "#ff9800" : "#ffc107";
+
+        const label = document.createElement("span");
+        label.classList.add("label");
+        label.innerText = `Giải ${i + 1}`;
+
+        slice.appendChild(label);
+        wheel.appendChild(slice);
+    }
 }
+
 
 function spinWheel() {
   let start = Date.now();
@@ -49,4 +68,5 @@ function selectWinner() {
   document.getElementById("draw-screen").style.display = "none";
   showWinner(winner);
 }
+
 
