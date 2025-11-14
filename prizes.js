@@ -1,115 +1,139 @@
-// prizes.js
+// prizes.js - LOGIC HIỂN THỊ GIẢI THƯỞNG VÀ ĐIỀU KHIỂN CHUYỂN ĐỔI MÀN HÌNH
 
+// Dữ liệu giải thưởng (Cần được cập nhật với thông tin chính xác của bạn)
 const prizeData = [
-    { name: "Giải Đặc Biệt", quantity: "01", image: "/gala-draw/images/giai_dac_biet.jpg", isSpecial: true },
-    { name: "Giải Nhất", quantity: "03", image: "/gala-draw/images/giai_nhat.jpg", isSpecial: false },
-    { name: "Giải Nhì", quantity: "10", image: "/gala-draw/images/giai_nhi.jpg", isSpecial: false },
-    { name: "Giải Ba", quantity: "25", image: "/gala-draw/images/giai_ba.jpg", isSpecial: false }
+    { 
+        name: "Giải Đặc Biệt", 
+        description: "Nồi chiên không dầu Daewoo",
+        quantity: "01", 
+        image: "images/airfryer.jpg", 
+        isSpecial: true,
+        specs: "SỬ DỤNG 5L, 1350W - CÀI ĐẶT TỐI ĐA 200°C, 60 PHÚT" // Cập nhật specs để khắc phục lỗi undefined
+    },
+    { 
+        name: "Giải Nhất", 
+        description: "Nồi cơm điện tử Philips",
+        quantity: "03", 
+        image: "images/ricecooker.jpg", 
+        isSpecial: false,
+        specs: "Dung tích 1.8L, Công suất 700W"
+    },
+    { 
+        name: "Giải Nhì", 
+        description: "Máy xay sinh tố đa năng",
+        quantity: "05", 
+        image: "images/blender.jpg", 
+        isSpecial: false,
+        specs: "Công suất 350W, Cối thủy tinh 1.5L"
+    },
+    // Thêm các giải thưởng khác vào đây
 ];
 
+// Hàm tạo thẻ giải thưởng (Card)
+function createPrizeCard(prize) {
+    const card = document.createElement('div');
+    card.className = prize.isSpecial ? 'prize-card special-prize' : 'prize-card';
 
-// 2. LOGIC HIỂN THỊ VÀ CHỨC NĂNG NÚT QUAY
-document.addEventListener('DOMContentLoaded', () => {
-    // Lấy container cho Giải Đặc Biệt và các giải còn lại
-    const specialContainer = document.getElementById('special-prize-output');
-    const regularContainer = document.getElementById('regular-prizes-output');
+    // Đảm bảo sử dụng thuộc tính 'specs' hoặc 'description'
+    const specsHtml = prize.specs ? `<p class="specs">${prize.specs}</p>` : '';
+
+    card.innerHTML = `
+        <img src="${prize.image}" alt="${prize.name}">
+        <div class="prize-info">
+            ${specsHtml}
+            <h3>${prize.name}</h3>
+            <p class="quantity">Số lượng: <strong>${prize.quantity}</strong></p>
+        </div>
+        <div class="${prize.isSpecial ? 'special-label' : 'regular-label'}">
+            ${prize.isSpecial ? 'Giải Đặc Biệt' : 'Giải'}
+            <span class="quantity-number">${prize.quantity}</span>
+        </div>
+    `;
+    return card;
+}
+
+// Hàm render tất cả giải thưởng ra màn hình
+function renderPrizes() {
+    const specialOutput = document.getElementById('special-prize-output');
+    const regularOutput = document.getElementById('regular-prizes-output');
     
-    if (!specialContainer || !regularContainer) return; 
+    specialOutput.innerHTML = '';
+    regularOutput.innerHTML = '';
 
-    // --- A. LOGIC HIỂN THỊ DANH SÁCH ---
     prizeData.forEach(prize => {
-        const card = document.createElement('div');
-        card.classList.add('prize-card');
-        
-        // Cấu trúc HTML (Hình ảnh trên, Tên & Số lượng dưới)
-        card.innerHTML = `
-            <img src="${prize.image}" alt="${prize.name}" class="prize-image" onerror="this.onerror=null; this.src='https://via.placeholder.com/350x240?text=Placeholder'">
-            
-            <div class="prize-info">
-                <span class="prize-name">${prize.name}</span> 
-                <span class="info-value">${prize.quantity}</span>
-            </div>
-        `;
-        
-        // Phân loại và chèn
+        const card = createPrizeCard(prize);
         if (prize.isSpecial) {
-            card.classList.add('special');
-            specialContainer.appendChild(card);
+            specialOutput.appendChild(card);
         } else {
-            regularContainer.appendChild(card);
+            regularOutput.appendChild(card);
         }
     });
+}
 
-   // --- B. LOGIC NÚT QUAY VÀ PHÁT NHẠC ---
+
+document.addEventListener('DOMContentLoaded', () => {
+    // RENDER GIẢI THƯỞNG
+    renderPrizes();
+
+    // KHAI BÁO BIẾN CHO CÁC NÚT VÀ AUDIO (Đảm bảo CHỈ KHAI BÁO MỘT LẦN!)
     const backgroundMusic = document.getElementById('backgroundMusic');
     const rollMusic = document.getElementById('rollMusic');
     const floatingBackButton = document.getElementById('floatingBackButton');
     const musicToggleButton = document.getElementById('musicToggleButton');
-    
-    // Thêm các phần tử mới
-    const prizeListWrapper = document.getElementById('prizeListWrapper');
-    const drawArea = document.getElementById('drawArea');
-    
-    // Khởi tạo logic quay số từ file draw.js
-    if (typeof initDrawLogic === 'function') {
-        initDrawLogic();
-    }
+    const bodyElement = document.body;
 
-    // Hàm dừng nhạc nền và cập nhật nút chuyển đổi (Giữ nguyên)
-    function pauseBackgroundMusic() {
-        if (!backgroundMusic.paused) {
+    let isMusicPlaying = false; // Trạng thái nhạc nền
+
+    // --- LOGIC AUDIO ---
+    function toggleMusic() {
+        if (isMusicPlaying) {
             backgroundMusic.pause();
             musicToggleButton.textContent = 'Phát nhạc';
-            musicToggleButton.title = 'Phát nhạc';
+        } else {
+            backgroundMusic.play().catch(error => {
+                console.log("Không thể tự động phát nhạc. Vui lòng tương tác với trang.");
+            });
+            musicToggleButton.textContent = 'Dừng nhạc';
         }
+        isMusicPlaying = !isMusicPlaying;
+    }
+    
+    if (musicToggleButton) {
+        musicToggleButton.onclick = toggleMusic;
     }
 
-    // 1. Xử lý nút QUAY (Chuyển đổi màn hình)
+    // --- LOGIC CHUYỂN ĐỔI MÀN HÌNH QUAY THƯỞNG (Quan trọng) ---
     if (floatingBackButton) {
         floatingBackButton.onclick = function() {
-            console.log('Chuyển đổi sang giao diện quay thưởng!');
+            // 1. CHUYỂN ĐỔI GIAO DIỆN
+            bodyElement.classList.toggle('drawing-active'); 
             
-            // a. Dừng nhạc sự kiện (open_song)
-            pauseBackgroundMusic();
-            
-            // b. Phát nhạc quay thưởng (roll_song)
-            if (rollMusic) { 
-                rollMusic.currentTime = 0; 
-                rollMusic.play().catch(e => console.error("Không thể phát nhạc quay thưởng:", e));
+            // 2. XỬ LÝ NHẠC
+            if (bodyElement.classList.contains('drawing-active')) {
+                // Đã chuyển sang màn hình quay thưởng
+                console.log("Chuyển đổi sang giao diện quay thưởng!");
+                backgroundMusic.pause();
+                rollMusic.play().catch(error => console.log("Không thể phát nhạc quay thưởng."));
+                
+                // 3. KHỞI TẠO LOGIC QUAY SỐ (TỪ draw.js)
+                if (window.initDrawLogic) {
+                    window.initDrawLogic();
+                }
+
+            } else {
+                // Quay lại màn hình giải thưởng
+                rollMusic.pause();
+                rollMusic.currentTime = 0;
+                // Nếu người dùng đã bật nhạc nền, phát lại
+                if (isMusicPlaying) {
+                     backgroundMusic.play().catch(error => console.log("Không thể phát nhạc nền."));
+                }
             }
-            
-            // c. CHUYỂN ĐỔI GIAO DIỆN: Ẩn danh sách và Hiện khu vực quay thưởng
-            if (prizeListWrapper) prizeListWrapper.style.display = 'none';
-            if (drawArea) drawArea.style.display = 'flex'; 
-            
-            // Thêm class để áp dụng hiệu ứng nền kịch tính từ draw.css
-            document.body.classList.add('drawing-active'); 
         };
     }
     
-    // 2. Xử lý nút PHÁT NHẠC / DỪNG PHÁT (Chỉ điều khiển backgroundMusic)
-    if (musicToggleButton && backgroundMusic) {
-        musicToggleButton.onclick = function() {
-            if (backgroundMusic.paused) {
-                // Nếu đang dừng -> Phát nhạc sự kiện
-                const playPromise = backgroundMusic.play();
-
-                if (playPromise !== undefined) {
-                    playPromise.then(() => {
-                        musicToggleButton.textContent = 'Dừng phát';
-                        musicToggleButton.title = 'Dừng phát nhạc';
-                    }).catch(error => {
-                        alert("Không thể phát nhạc. Vui lòng kiểm tra file nhạc.");
-                    });
-                }
-            } else {
-                // Nếu đang chạy -> Dừng nhạc sự kiện
-                pauseBackgroundMusic();
-            }
-        };
+    // Nếu hàm initDrawLogic đã được khai báo, gọi nó (chủ yếu để chạy askForReset())
+    if (bodyElement.classList.contains('drawing-active') && window.initDrawLogic) {
+        window.initDrawLogic();
     }
 });
-
-
-
-
