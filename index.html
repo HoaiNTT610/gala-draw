@@ -4,19 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Giải Thưởng</title>
-    <link rel="stylesheet" href="/gala-draw/prizes.css">
-    <link rel="stylesheet" href="/gala-draw/draw.css">
+
+    <base href="/gala-draw/" /> 
+    
+    <link rel="stylesheet" href="prizes.css">
+    <link rel="stylesheet" href="draw.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <div class="special-prize-wrapper" id="special-prize-output">
-    </div>
 
-    <div class="prize-container" id="regular-prizes-output">
+    <div id="prizeListWrapper">
+        <h1 class="prize-list-header">🎉 GIẢI THƯỞNG 🎉</h1>
+        <div class="special-prize-wrapper" id="special-prize-output">
+            </div>
+        <div class="prize-container" id="regular-prizes-output">
+            </div>
+    </div>
+    
+    <div id="drawArea" class="draw-area"> 
+        <h2 class="draw-title">VÒNG QUAY !</h2>
+        
+        <div class="slot-display-wrapper" id="slotDisplayWrapper">
+            
+            <div class="center-button-overlay">
+                <button id="spinButton" class="draw-button">
+                    QUAY
+                </button>
+            </div>
+            
+            <div class="slot-roller" id="slotRoller">
+                BẮT ĐẦU
+            </div>
+        </div>
     </div>
 
     <div class="fixed-controls-container">
-        <button id="floatingBackButton" class="control-button" title="Quay">
+        <button id="floatingBackButton" class="control-button" title="Quay số">
             Quay
         </button>
 
@@ -26,22 +49,17 @@
     </div>
 
     <audio id="backgroundMusic" loop>
-        <source src="/gala-draw/sounds/open_song.mp3" type="audio/mp3"> 
+        <source src="sounds/open_song.mp3" type="audio/mp3"> 
         Trình duyệt của bạn không hỗ trợ thẻ audio.
     </audio>
 
     <audio id="rollMusic">
-        <source src="/gala-draw/sounds/background_music.mp3" type="audio/mp3"> 
+        <source src="sounds/background_music.mp3" type="audio/mp3"> 
+        Trình duyệt của bạn không hỗ trợ thẻ audio.
     </audio>
     
+    <script src="draw.js"></script> 
     <script src="prizes.js"></script>
     
 </body>
-
 </html>
-
-
-
-
-
-
