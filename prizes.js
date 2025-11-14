@@ -41,46 +41,58 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- B. LOGIC NÚT QUAY VÀ PHÁT NHẠC ---
-    const music = document.getElementById('backgroundMusic');
+    const backgroundMusic = document.getElementById('backgroundMusic');
+    const rollMusic = document.getElementById('rollMusic');
     const floatingBackButton = document.getElementById('floatingBackButton');
     const musicToggleButton = document.getElementById('musicToggleButton');
     
+    // Hàm dừng nhạc nền và cập nhật nút chuyển đổi
+    function pauseBackgroundMusic() {
+        if (!backgroundMusic.paused) {
+            backgroundMusic.pause();
+            musicToggleButton.textContent = 'Phát nhạc';
+            musicToggleButton.title = 'Phát nhạc';
+        }
+    }
+
     // 1. Xử lý nút QUAY
     if (floatingBackButton) {
         floatingBackButton.onclick = function() {
-            console.log('Nút Quay được nhấp.');
-            alert('Bạn đã nhấp nút Quay!');
-            // Thêm hành động quay lại tại đây
+            console.log('Nút Quay được nhấp. Chuyển nhạc!');
+            
+            // a. Dừng nhạc sự kiện (open_song)
+            pauseBackgroundMusic();
+            
+            // b. Đặt nhạc quay thưởng về đầu và phát (roll_song)
+            rollMusic.currentTime = 0; // Đặt về đầu
+            rollMusic.play().catch(e => console.error("Không thể phát nhạc quay thưởng:", e));
+            
+            // Thêm hành động quay số tại đây
+            alert('Đã chuyển sang nhạc quay thưởng!');
         };
     }
 
-    // 2. Xử lý nút PHÁT NHẠC / DỪNG PHÁT
-    if (musicToggleButton && music) {
+    // 2. Xử lý nút PHÁT NHẠC / DỪNG PHÁT (Chỉ điều khiển backgroundMusic)
+    if (musicToggleButton && backgroundMusic) {
         musicToggleButton.onclick = function() {
-            if (music.paused) {
-                // Nếu nhạc đang dừng -> Phát
-                const playPromise = music.play();
+            if (backgroundMusic.paused) {
+                // Nếu đang dừng -> Phát nhạc sự kiện
+                const playPromise = backgroundMusic.play();
 
                 if (playPromise !== undefined) {
                     playPromise.then(() => {
-                        // Phát thành công -> Đổi chữ
                         musicToggleButton.textContent = 'Dừng phát';
                         musicToggleButton.title = 'Dừng phát nhạc';
                     }).catch(error => {
-                        // Thất bại (có thể do lỗi file nhạc)
-                        alert("Không thể phát nhạc. Vui lòng kiểm tra file nhạc và đường dẫn.");
+                        alert("Không thể phát nhạc. Vui lòng kiểm tra file nhạc.");
                     });
                 }
             } else {
-                // Nếu nhạc đang chạy -> Dừng
-                music.pause();
-                musicToggleButton.textContent = 'Phát nhạc';
-                musicToggleButton.title = 'Phát nhạc';
+                // Nếu đang chạy -> Dừng nhạc sự kiện
+                pauseBackgroundMusic();
             }
         };
     }
-	
-	
-
 });
+
 
