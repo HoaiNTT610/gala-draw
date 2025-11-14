@@ -67,8 +67,8 @@ document.addEventListener('DOMContentLoaded', () => {
             rollMusic.currentTime = 0; // Đặt về đầu
             rollMusic.play().catch(e => console.error("Không thể phát nhạc quay thưởng:", e));
             
-            // Thêm hành động quay số tại đây
-            alert('Đã chuyển sang nhạc quay thưởng!');
+            // b. KÍCH HOẠT GIAO DIỆN MỚI BẰNG CÁCH THÊM CLASS
+            document.body.classList.add('drawing-active');
         };
     }
 
@@ -94,5 +94,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 });
+
 
 
