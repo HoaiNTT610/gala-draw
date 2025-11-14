@@ -7,7 +7,7 @@ const prizes = [
 ];
 
 // Biến lưu danh sách người trúng giải
-let winners = [];
+window.winners = [];
 
 // Kiểm tra danh sách người trúng giải khi mở app
 window.addEventListener("load", () => {
@@ -89,3 +89,4 @@ btnMusic.addEventListener("click", () => {
     btnMusic.textContent = "Phát nhạc";
   }
 });
+
