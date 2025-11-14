@@ -1,10 +1,10 @@
 // prizes.js
 
 const prizeData = [
-    { name: "Giải Đặc Biệt", quantity: "01", image: "images/giai_dac_biet.jpg", isSpecial: true },
-    { name: "Giải Nhất", quantity: "03", image: "images/giai_nhat.jpg", isSpecial: false },
-    { name: "Giải Nhì", quantity: "10", image: "images/giai_nhi.jpg", isSpecial: false },
-    { name: "Giải Ba", quantity: "25", image: "images/giai_ba.jpg", isSpecial: false }
+    { name: "Giải Đặc Biệt", quantity: "01", image: "/gala-draw/images/giai_dac_biet.jpg", isSpecial: true },
+    { name: "Giải Nhất", quantity: "03", image: "/gala-draw/images/giai_nhat.jpg", isSpecial: false },
+    { name: "Giải Nhì", quantity: "10", image: "/gala-draw/images/giai_nhi.jpg", isSpecial: false },
+    { name: "Giải Ba", quantity: "25", image: "/gala-draw/images/giai_ba.jpg", isSpecial: false }
 ];
 
 
@@ -84,4 +84,5 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 	
 	
+
 });
