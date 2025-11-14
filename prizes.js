@@ -1,71 +1,43 @@
 const prizes = [
-{ name: "Giải Đặc Biệt", qty: 1, img: "images/giai_dac_biet.jpg", main: true },
-{ name: "Giải Nhất", qty: 1, img: "images/giai_nhat.jpg" },
-{ name: "Giải Nhì", qty: 2, img: "images/giai_nhi.jpg" },
-{ name: "Giải Ba", qty: 3, img: "images/giai_ba.jpg" }
+  {name: "Giải đặc biệt", quantity: 1, image: "images/giai_dac_biet.jpg"},
+  {name: "Giải nhất", quantity: 2, image: "images/giai_nhat.jpg"},
+  {name: "Giải nhì", quantity: 3, image: "images/giai_nhi.jpg"},
+  {name: "Giải ba", quantity: 5, image: "images/giai_ba.jpg"},
 ];
 
-
 const music = new Audio("sounds/open_program.mp3");
-music.loop = true;
-music.volume = 0.1;
-let musicPlaying = false;
+music.volume = 0.2;
 
+function renderPrizes() {
+  const container = document.getElementById("prizes-list");
+  prizes.forEach(prize => {
+    const div = document.createElement("div");
+    div.className = "prize";
+    div.innerHTML = `
+      <img src="${prize.image}" alt="${prize.name}" width="150">
+      <div>${prize.name} (${prize.quantity})</div>
+    `;
+    container.appendChild(div);
+  });
+}
 
-window.onload = () => {
-loadPrizeList();
-checkSavedWinners();
-};
+renderPrizes();
 
-
-function loadPrizeList() {
-const list = document.getElementById("prize-list");
-list.innerHTML = "";
-
-
-prizes.forEach(p => {
-const item = document.createElement("div");
-item.className = `prize-item ${p.main ? 'prize-main' : ''}`;
-item.innerHTML = `
-<img src="${p.img}" />
-<h3>${p.name} - ${p.qty} giải</h3>
-`;
-list.appendChild(item);
+document.getElementById("btn-draw").addEventListener("click", () => {
+  document.getElementById("prizes-screen").style.display = "none";
+  document.getElementById("draw-screen").style.display = "block";
+  duringMusic.play();
 });
-}
 
+let duringMusic = new Audio("sounds/during_process.mp3");
+duringMusic.loop = true;
 
-// ================== MUSIC CONTROL ==================
-document.getElementById("btn-music").onclick = () => {
-if (!musicPlaying) {
-music.play();
-let x = setInterval(() => {
-if (music.volume < 1) music.volume += 0.05;
-else clearInterval(x);
-}, 200);
-musicPlaying = true;
-document.getElementById("btn-music").innerText = "Dừng nhạc";
-} else {
-music.pause();
-musicPlaying = false;
-document.getElementById("btn-music").innerText = "Phát nhạc";
-}
-};
-
-
-// ================== SWITCH TO DRAW SCREEN ==================
-document.getElementById("btn-start-draw").onclick = () => {
-music.pause();
-document.getElementById("prizes-screen").classList.add("hidden");
-document.getElementById("draw-screen").classList.remove("hidden");
-startDuringMusic();
-};
-
-
-function checkSavedWinners() {
-if (localStorage.getItem("winners")) {
-if (confirm("Bạn có muốn reset danh sách người trúng?")) {
-localStorage.removeItem("winners");
-}
-}
-}
+document.getElementById("btn-music").addEventListener("click", () => {
+  if(music.paused) {
+    music.play();
+    document.getElementById("btn-music").textContent = "Dừng nhạc";
+  } else {
+    music.pause();
+    document.getElementById("btn-music").textContent = "Phát nhạc";
+  }
+});
