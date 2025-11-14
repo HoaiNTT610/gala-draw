@@ -1,6 +1,6 @@
-// draw.js
+// draw.js - LOGIC QUAY SỐ VÀ CHỌN NGẪU NHIÊN
 
-// Danh sách người tham gia (Bạn cần cập nhật danh sách này)
+// Danh sách người tham gia (BẠN PHẢI CẬP NHẬT DANH SÁCH NÀY)
 const participants = [
     "Nguyễn Văn A", 
     "Trần Thị B", 
@@ -13,9 +13,7 @@ const participants = [
     // THÊM TẤT CẢ TÊN NGƯỜI THAM GIA VÀO ĐÂY
 ];
 
-// Danh sách người chiến thắng đã chọn (để tránh chọn trùng lặp)
 let winners = []; 
-// Biến để theo dõi trạng thái quay
 let isSpinning = false;
 
 /**
@@ -27,16 +25,11 @@ function selectRandomWinner() {
         return "HẾT NGƯỜI CHƠI";
     }
 
-    // 1. Tạo chỉ mục (index) ngẫu nhiên
     const randomIndex = Math.floor(Math.random() * participants.length);
-
-    // 2. Lấy tên người chiến thắng
     const winnerName = participants[randomIndex];
 
-    // 3. XÓA người này khỏi mảng participants để không bị chọn lại
+    // XÓA người này khỏi mảng participants để không bị chọn lại
     participants.splice(randomIndex, 1); 
-
-    // 4. Thêm vào danh sách người thắng cuộc
     winners.push(winnerName); 
 
     return winnerName;
@@ -44,20 +37,12 @@ function selectRandomWinner() {
 
 
 /**
- * Logic chính để khởi động hoặc dừng hiệu ứng quay số.
- * @param {HTMLElement} resultDisplay - Thẻ hiển thị kết quả.
- * @param {HTMLElement} spinButton - Nút bấm Quay/Dừng.
+ * Logic chính để khởi động hiệu ứng quay số.
  */
 function toggleSpin(resultDisplay, spinButton) {
-    if (isSpinning) {
-        // --- DỪNG QUAY ---
-        return; // Logic dừng sẽ được xử lý trong setTimeout
-    }
-
-    if (participants.length === 0) {
-        resultDisplay.textContent = "HẾT NGƯỜI CHƠI";
-        alert("Đã hết người chơi trong danh sách!");
-        return;
+    if (isSpinning || participants.length === 0) {
+        if (participants.length === 0) resultDisplay.textContent = "HẾT NGƯỜI CHƠI";
+        return; 
     }
 
     // --- BẮT ĐẦU QUAY ---
@@ -66,16 +51,26 @@ function toggleSpin(resultDisplay, spinButton) {
     spinButton.disabled = true;
 
     // 1. Hiệu ứng quay số (Chạy ngẫu nhiên tên trong 3 giây)
+    let rotation = 0;
     const interval = setInterval(() => {
-        // Chỉ hiển thị ngẫu nhiên các tên trong danh sách còn lại
         const tempIndex = Math.floor(Math.random() * participants.length);
-        // Đảm bảo không bị lỗi nếu mảng trống khi đang quay
+        // Hiển thị tên ngẫu nhiên
         resultDisplay.textContent = participants[tempIndex] || "QUAY...";
+        
+        // HIỆU ỨNG XOAY 3D VÀ RUNG NHẸ
+        rotation += 10;
+        const rotateX = Math.sin(rotation * (Math.PI / 180)) * 5; 
+        const rotateY = Math.cos(rotation * (Math.PI / 180)) * 5; 
+        resultDisplay.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+        
     }, 100); 
 
     // 2. DỪNG QUAY VÀ CHỌN KẾT QUẢ CUỐI CÙNG sau 3 giây
     setTimeout(() => {
         clearInterval(interval);
+        
+        // Đưa hộp hiển thị về trạng thái tĩnh
+        resultDisplay.style.transform = 'none'; 
         
         const finalWinner = selectRandomWinner();
         resultDisplay.textContent = finalWinner;
@@ -84,16 +79,12 @@ function toggleSpin(resultDisplay, spinButton) {
         spinButton.textContent = "BẮT ĐẦU QUAY";
         spinButton.disabled = false;
         
-        // Thông báo kết quả
         alert(`🎉 CHÚC MỪNG: ${finalWinner} đã trúng thưởng!`);
         
-        // Tùy chọn: Thêm logic lưu người thắng cuộc vào danh sách hiển thị
-        // saveWinnerToDisplay(finalWinner); 
-        
-    }, 3000); // Quay trong 3 giây
+    }, 3000); 
 }
 
-// Hàm này sẽ được gọi từ prizes.js để khởi tạo nút
+// Hàm khởi tạo logic nút Bắt đầu Quay
 window.initDrawLogic = function() {
     const resultDisplay = document.getElementById('resultDisplay');
     const spinButton = document.getElementById('spinButton');
