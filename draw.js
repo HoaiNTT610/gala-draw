@@ -8,7 +8,11 @@ const users = [
   {name:"Phạm D", department:"HR"},
 ];
 
-let winners = JSON.parse(localStorage.getItem("winners")) || [];
+// Sử dụng biến toàn cục window.winners
+console.log(window.winners); // kiểm tra danh sách người trúng giải
+
+// Lấy danh sách người trúng từ localStorage nếu cần
+window.winners = window.winners || JSON.parse(localStorage.getItem("winners")) || [];
 
 function drawWheel() {
   // Vẽ bánh xe may mắn (simple colors + labels)
@@ -45,3 +49,4 @@ function selectWinner() {
   document.getElementById("draw-screen").style.display = "none";
   showWinner(winner);
 }
+
