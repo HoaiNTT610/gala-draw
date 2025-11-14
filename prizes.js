@@ -1,7 +1,3 @@
-// =======================
-// prizes.js
-// =======================
-
 // Danh sách giải thưởng
 const prizes = [
   {name: "Giải đặc biệt", quantity: 1, image: "images/giai_dac_biet.jpg"},
@@ -13,9 +9,7 @@ const prizes = [
 // Biến lưu danh sách người trúng giải
 let winners = [];
 
-// =======================
 // Kiểm tra danh sách người trúng giải khi mở app
-// =======================
 window.addEventListener("load", () => {
   const storedWinners = JSON.parse(localStorage.getItem("winners")) || [];
   if(storedWinners.length > 0){
@@ -26,7 +20,7 @@ window.addEventListener("load", () => {
       winners = storedWinners;
     }
   }
-  // Sau khi xử lý reset/load, render danh sách giải thưởng
+
   renderPrizes();
 });
 
@@ -35,16 +29,29 @@ window.addEventListener("load", () => {
 // =======================
 function renderPrizes() {
   const container = document.getElementById("prizes-list");
-  container.innerHTML = ""; // xóa trước khi render lại
-  prizes.forEach(prize => {
+  container.innerHTML = "";
+
+  // Giải đầu tiên riêng trên hàng đầu tiên
+  const firstPrize = prizes[0];
+  const firstDiv = document.createElement("div");
+  firstDiv.className = "prize first-prize";
+  firstDiv.innerHTML = `
+    <img src="${firstPrize.image}" alt="${firstPrize.name}">
+    <div>${firstPrize.name} (${firstPrize.quantity})</div>
+  `;
+  container.appendChild(firstDiv);
+
+  // Các giải còn lại
+  for(let i=1; i<prizes.length; i++){
+    const prize = prizes[i];
     const div = document.createElement("div");
     div.className = "prize";
     div.innerHTML = `
-      <img src="${prize.image}" alt="${prize.name}" width="150">
+      <img src="${prize.image}" alt="${prize.name}">
       <div>${prize.name} (${prize.quantity})</div>
     `;
     container.appendChild(div);
-  });
+  }
 }
 
 // =======================
@@ -59,15 +66,12 @@ duringMusic.loop = true;
 // Nút Quay
 // =======================
 document.getElementById("btn-draw").addEventListener("click", () => {
-  // Tắt nhạc nếu đang phát
   if(!music.paused) music.pause();
   if(!duringMusic.paused) duringMusic.pause();
 
-  // Chuyển màn hình
   document.getElementById("prizes-screen").style.display = "none";
   document.getElementById("draw-screen").style.display = "block";
 
-  // Phát nhạc during_process
   duringMusic.currentTime = 0;
   duringMusic.play();
 });
@@ -78,7 +82,6 @@ document.getElementById("btn-draw").addEventListener("click", () => {
 const btnMusic = document.getElementById("btn-music");
 btnMusic.addEventListener("click", () => {
   if(music.paused){
-    // Phát nhạc từ điểm dừng trước đó
     music.play();
     btnMusic.textContent = "Dừng nhạc";
   } else {
